@@ -1,0 +1,57 @@
+-- GUI by ChatGPT - giống andepzai style
+loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+
+local OrionLib = OrionLib
+local Window = OrionLib:MakeWindow({Name = "Blox Fruit | andepzai style", HidePremium = false, SaveConfig = false, IntroText = "Auto Farm GUI"})
+
+local autofarmEnabled = false
+
+function autoFarm()
+    while autofarmEnabled do
+        local enemy = nil
+        for i, v in pairs(game.Workspace.Enemies:GetChildren()) do
+            if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                enemy = v
+                break
+            end
+        end
+
+        if enemy then
+            local plr = game.Players.LocalPlayer
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") and enemy:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.CFrame = enemy.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+                -- Gửi key Z để đánh
+                game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, game)
+            end
+        end
+        wait(0.5)
+    end
+end
+
+-- Tab Auto Farm
+local Tab = Window:MakeTab({
+	Name = "Auto Farm",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+Tab:AddToggle({
+	Name = "Bật/Tắt Auto Farm",
+	Default = false,
+	Callback = function(Value)
+		autofarmEnabled = Value
+		if Value then
+			autoFarm()
+		end
+	end    
+})
+
+Tab:AddButton({
+	Name = "Tắt GUI",
+	Callback = function()
+        OrionLib:Destroy()
+    end    
+})
+
+OrionLib:Init()
